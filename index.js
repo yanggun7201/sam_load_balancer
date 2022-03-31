@@ -1,6 +1,7 @@
 const proxy = require('express-http-proxy');
 const app = require('express')();
 const bodyParser = require('body-parser');
+const moment = require('moment');
 
 // app.use('/proxy', proxy('www.google.com'));
 
@@ -28,7 +29,7 @@ const getTurn = async (key, url, index) => {
 
   while (true) {
     if (queue[0] === key) {
-      console.log("[" + new Date().toISOString() + "] " + url + " " + index);
+      console.log("[" + getDatetime() + "] " + url + " " + index);
       setTimeout(() => {
         queue.shift();
       }, 2000);
@@ -36,6 +37,10 @@ const getTurn = async (key, url, index) => {
     }
     await sleep();
   }
+}
+
+function getDatetime () {
+  return moment().format("YYYY-MM-DD hh:mm:ss");
 }
 
 function selectProxyPort() {
@@ -64,7 +69,7 @@ app.use('/', proxy(selectProxyPort, {
   },
   userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
     if (userRes.statusCode !== 200) {
-      console.log("[" + new Date().toISOString() + "] " + userReq.originalUrl + " " + userReq.index, "[", userRes.statusCode, "]");
+      console.log("[" + getDatetime() + "] " + userReq.originalUrl + " " + userReq.index, "[", userRes.statusCode, "]");
     }
     return proxyResData;
   },
