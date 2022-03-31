@@ -28,7 +28,7 @@ const getTurn = async (key, url, index) => {
 
   while (true) {
     if (queue[0] === key) {
-      console.log("[" + new Date().toISOString() + "] " + url, index);
+      console.log("[" + new Date().toISOString() + "] " + url + " " + index);
       setTimeout(() => {
         queue.shift();
       }, 2000);
@@ -64,7 +64,7 @@ app.use('/', proxy(selectProxyPort, {
   },
   userResDecorator: function (proxyRes, proxyResData, userReq, userRes) {
     if (userRes.statusCode !== 200) {
-      console.log("[" + new Date().toISOString() + "] " + userReq.originalUrl, userReq.index, "[", userRes.statusCode, "]");
+      console.log("[" + new Date().toISOString() + "] " + userReq.originalUrl + " " + userReq.index, "[", userRes.statusCode, "]");
     }
     return proxyResData;
   },
