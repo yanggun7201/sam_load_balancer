@@ -32,7 +32,7 @@ const getTurn = async (key, url, index) => {
       console.log("[" + getDatetime() + "] " + url + " " + index);
       setTimeout(() => {
         queue.shift();
-      }, 2000);
+      }, 1000);
       break;
     }
     await sleep();
