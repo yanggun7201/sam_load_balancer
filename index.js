@@ -16,6 +16,26 @@ const samCount = ports.length;
 
 const queue = [];
 
+const parseArg = (keyValue) => {
+  const keyValues = keyValue.split("=");
+  console.log('argument key value', keyValues);
+  return keyValues;
+}
+
+let requestWait = 1000;
+
+process.argv.forEach(arg => {
+  if (arg.startsWith("requestWait=")) {
+    const temp = Number(parseArg(arg)[1]);
+    if(!isNaN(temp)) {
+      requestWait = temp;
+    }
+  }
+});
+
+console.log('========================');
+console.log('requestWait', requestWait);
+
 const sleep = async () => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -32,7 +52,7 @@ const getTurn = async (key, url, index) => {
       console.log("[" + getDatetime() + "] " + url + " " + index);
       setTimeout(() => {
         queue.shift();
-      }, 1000);
+      }, requestWait);
       break;
     }
     await sleep();
