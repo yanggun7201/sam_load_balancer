@@ -22,12 +22,12 @@ const parseArg = (keyValue) => {
   return keyValues;
 }
 
-let requestWait = 1000;
+let requestWait = 0; // default 0
 
 process.argv.forEach(arg => {
   if (arg.startsWith("requestWait=")) {
     const temp = Number(parseArg(arg)[1]);
-    if(!isNaN(temp)) {
+    if(!isNaN(temp) && temp > 0 && temp <= 10000) {
       requestWait = temp;
     }
   }
