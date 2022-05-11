@@ -2,6 +2,7 @@ const proxy = require('express-http-proxy');
 const app = require('express')();
 const bodyParser = require('body-parser');
 const moment = require('moment');
+const {config, initProcessArguments} = require("./libs/processArguments");
 
 // app.use('/proxy', proxy('www.google.com'));
 
@@ -16,22 +17,8 @@ const samCount = ports.length;
 
 const queue = [];
 
-const parseArg = (keyValue) => {
-  const keyValues = keyValue.split("=");
-  console.log('argument key value', keyValues);
-  return keyValues;
-}
-
-let requestWait = 0; // default 0
-
-process.argv.forEach(arg => {
-  if (arg.startsWith("requestWait=")) {
-    const temp = Number(parseArg(arg)[1]);
-    if(!isNaN(temp) && temp > 0 && temp <= 10000) {
-      requestWait = temp;
-    }
-  }
-});
+initProcessArguments();
+const {requestWait} = config;
 
 console.log('========================');
 console.log('requestWait', requestWait);
