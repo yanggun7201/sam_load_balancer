@@ -7,7 +7,7 @@ echo "" > sam.log
 
 # npm start will running in background
 # node index.js also will be run in background after ctrl+c
-npm start &
+npm run start:nohup &
 
 
 function run_local_sam {
