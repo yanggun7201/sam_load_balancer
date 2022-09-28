@@ -4,7 +4,10 @@ PROJECT_DIR=$(find $HOME -type d -name nep-platform-operator-interface 2>/dev/nu
 
 # overwrite the current file
 echo "" > nohup.out
-echo "" > sam.log
+for PORT in {8082..8086}
+do
+    echo "" > sam-$PORT.log
+done
 
 # npm start will running in background
 # node index.js also will be run in background after ctrl+c
@@ -30,7 +33,7 @@ function run_local_sam {
     fi
 
     # make sure local sam run in background
-    AWS_PROFILE=vector-nep-sandbox sam local start-api -p $port -t target/sam.jvm.yml --host 0.0.0.0 $warmContainers -n sam.env-linux.json >> $local_sam_dir/sam.log 2>&1 &
+    AWS_PROFILE=vector-nep-sandbox sam local start-api -p $port -t target/sam.jvm.yml --host 0.0.0.0 $warmContainers -n sam.env-linux.json >> $local_sam_dir/sam-$port.log 2>&1 &
 }
 
 for PORT in {8082..8086}
@@ -44,3 +47,14 @@ echo "kill this script along all sam & node processes"
 # set colorful output in cmd
 echo "run $(tput setaf 1 setab 7 bold)pkill -TERM -g $$$(tput sgr0)"
 
+# trap ctrl-c and call ctrl_c()
+trap ctrl_c INT
+
+function ctrl_c() {
+    echo "** All SAMs are killed"
+    pkill -TERM -g $$
+}
+
+while true; do
+    sleep 1
+done
