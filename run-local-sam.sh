@@ -1,5 +1,6 @@
 #!/bin/bash
 local_sam_dir=$PWD
+PROJECT_DIR=$(find $HOME -type d -name nep-platform-operator-interface 2>/dev/null | head -n 1)
 
 # overwrite the current file
 echo "" > nohup.out
@@ -10,9 +11,9 @@ echo "" > sam.log
 npm run start:nohup &
 
 
+
 function run_local_sam {
     # find the target dir and cd into it
-    PROJECT_DIR=$(find $HOME -type d -name nep-platform-operator-interface | head -n 1)
     cd $PROJECT_DIR
     port=8080
 
