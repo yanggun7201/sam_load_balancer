@@ -2,13 +2,6 @@
 local_sam_dir=$PWD
 PROJECT_DIR=$(find $HOME -type d -name nep-platform-operator-interface 2>/dev/null | head -n 1)
 
-# overwrite the current file
-echo "" > nohup.out
-for PORT in {8082..8086}
-do
-    echo "" > sam-$PORT.log
-done
-
 # npm start will running in background
 # node index.js also will be run in background after ctrl+c
 npm run start:nohup &
@@ -16,8 +9,7 @@ npm run start:nohup &
 
 
 function run_local_sam {
-    # find the target dir and cd into it
-    cd $PROJECT_DIR
+
     port=8080
 
     if [ -n "$1" ]
@@ -31,6 +23,11 @@ function run_local_sam {
     then
         $warmContainers="--warm-containers $2"
     fi
+
+    echo -e "Start at $(eval date)\n" > sam-$port.log
+
+    # find the target dir and cd into it
+    cd $PROJECT_DIR
 
     # make sure local sam run in background
     AWS_PROFILE=vector-nep-sandbox sam local start-api -p $port -t target/sam.jvm.yml --host 0.0.0.0 $warmContainers -n sam.env-linux.json >> $local_sam_dir/sam-$port.log 2>&1 &
